@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>News Blog</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Include CSS here for self-contained code */
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+
+    header {
+      background: #333;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .news-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .news-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .news-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .news-card h2 {
+      font-size: 1.2rem;
+      margin: 0.5rem;
+    }
+
+    .news-card h2 a {
+      text-decoration: none;
+      color: #333;
+    }
+
+    .news-card p {
+      font-size: 0.95rem;
+      margin: 0.5rem;
+      color: #555;
+    }
+
+    .pagination {
+      text-align: center;
+      margin: 1rem;
+    }
+
+    .pagination button {
+      padding: 0.5rem 1rem;
+      margin: 0 0.5rem;
+      background: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .pagination button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .pagination span {
+      font-size: 1rem;
+      margin: 0 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #eee;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Latest News</h1>
+  </header>
+
+  <main class="grid-container" id="news-container">
+    <!-- News cards will be injected here -->
+  </main>
+
+  <div class="pagination">
+    <button id="prev-btn">Previous</button>
+    <span id="page-info"></span>
+    <button id="next-btn">Next</button>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 News Blog</p>
+  </footer>
+
+  <script>
+    const newsData = [
+      { title: "Tech Breakthrough 1", image: "images/news1.jpg", preview: "Short intro for news 1...", link: "news1.html" },
+      { title: "World Update 2", image: "images/news2.jpg", preview: "Short intro for news 2...", link: "news2.html" },
+      { title: "Politics News 3", image: "images/news3.jpg", preview: "Short intro for news 3...", link: "news3.html" },
+      { title: "Sports Recap 4", image: "images/news4.jpg", preview: "Short intro for news 4...", link: "news4.html" },
+      { title: "Economy Watch 5", image: "images/news5.jpg", preview: "Short intro for news 5...", link: "news5.html" },
+      { title: "Entertainment Buzz 6", image: "images/news6.jpg", preview: "Short intro for news 6...", link: "news6.html" },
+      { title: "Global Affairs 7", image: "images/news7.jpg", preview: "Short intro for news 7...", link: "news7.html" },
+      { title: "Health Trends 8", image: "images/news8.jpg", preview: "Short intro for news 8...", link: "news8.html" },
+      { title: "Environment Alert 9", image: "images/news9.jpg", preview: "Short intro for news 9...", link: "news9.html" },
+      { title: "Space Discovery 10", image: "images/news10.jpg", preview: "Short intro for news 10...", link: "news10.html" },
+      { title: "New Startup 11", image: "images/news11.jpg", preview: "Short intro for news 11...", link: "news11.html" },
+      { title: "Market Insight 12", image: "images/news12.jpg", preview: "Short intro for news 12...", link: "news12.html" },
+    ];
+
+    const newsPerPage = 10;
+    let currentPage = 1;
+
+    const container = document.getElementById("news-container");
+    const pageInfo = document.getElementById("page-info");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+
+    function renderNews(page) {
+      container.innerHTML = "";
+      const start = (page - 1) * newsPerPage;
+      const end = start + newsPerPage;
+      const currentNews = newsData.slice(start, end);
+
+      currentNews.forEach(news => {
+        const card = document.createElement("div");
+        card.className = "news-card";
+        card.innerHTML = `
+          <img src="${news.image}" alt="${news.title}">
+          <h2><a href="${news.link}">${news.title}</a></h2>
+          <p>${news.preview}</p>
+        `;
+        container.appendChild(card);
+      });
+
+      pageInfo.textContent = `Page ${currentPage} of ${Math.ceil(newsData.length / newsPerPage)}`;
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = end >= newsData.length;
+    }
+
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderNews(currentPage);
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentPage * newsPerPage < newsData.length) {
+        currentPage++;
+        renderNews(currentPage);
+      }
+    });
+
+    renderNews(currentPage);
+  </script>
+</body>
+</html>
